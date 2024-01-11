@@ -4,7 +4,7 @@
 
 本人想要搞清楚的问题
 
-- [ ] embedding究竟是什么（暂时不打算**深究**了，毕竟是纯NLP的内容）
+- [x] embedding究竟是什么（暂时不打算**深究**了，毕竟是纯NLP的内容）
 
 - [x] Q、K、V究竟是什么（01.11）
 
@@ -18,13 +18,13 @@
 
 这个转换矩阵用于将稀疏矩阵，通过线性变换（在CNN中用全连结层进行转换），变成一个密集矩阵。
 
-这个线性变换其实就是矩阵乘法呗，这个词嵌入转换矩阵是对语料库进行抽象，提取一些共有的特征，形成的矩阵。可以看看这个[例子]([嵌入(embedding)层的理解 - USTC丶ZCC - 博客园](https://www.cnblogs.com/USTC-ZCC/p/11068791.html))，例子对语料提取的特征就是“皇帝”，“宫里”和“女”。当然，这也仅仅只是一个例子，实际对语料库进行训练的时候，肯定没有这么具象。按照我搞NLP的同学的说法，在word2vec之前，还有一个word2id的过程，比如按照词频，对语料库中的词（对于英文来说一般是一个个单词；对于中文来说可能是字，也可能是词，一般会有分词的过程）进行排序，然后按顺序编号，该编号组成的系数矩阵，和转换矩阵相乘（或者说就是线性变换），产生一个存在内在联系（对于抽象出的特征来说）的密集矩阵，也就是embedding。最后肯定要来看看维度，既然是对语料库进行抽象，那么势必会减少存储需求。举个例子，假如语料库中有3000个词，删除一些停用词，加入unknown编号，最后剩下来2800个词，这个word2id还要看一看， 怎么编码的。
+这个线性变换其实就是矩阵乘法呗，这个词嵌入转换矩阵是对语料库进行抽象，提取一些共有的特征，形成的矩阵。可以看看这个[例子](https://www.cnblogs.com/USTC-ZCC/p/11068791.html)，例子对语料提取的特征就是“皇帝”，“宫里”和“女”。当然，这也仅仅只是一个例子，实际对语料库进行训练的时候，肯定没有这么具象。按照我搞NLP的同学的说法，在word2vec之前，还有一个word2id的过程，比如按照词频，对语料库中的词（对于英文来说一般是一个个单词；对于中文来说可能是字，也可能是词，一般会有分词的过程）进行排序，然后按顺序编号，该编号组成的系数矩阵，和转换矩阵相乘（或者说就是线性变换），产生一个存在内在联系（对于抽象出的特征来说）的密集矩阵，也就是embedding。最后肯定要来看看维度，既然是对语料库进行抽象，那么势必会减少存储需求。举个例子，假如语料库中有3000个词，删除一些停用词，加入unknown编号，最后剩下来2800个词，这个word2id还要看一看， 怎么编码的。
 
 这个词嵌入矩阵是怎么训练出来的？
 
 按照目前的理解，首先要有语料库和训练算法。语料库中有用的是上下文，通过上下文的**某些信息**，来进行聚类（其实就是抽象出一些特征，将one-hot组成的稀疏矩阵降维成密集矩阵），那么上面提到的某些信息，就称为了聚类的依据。
 
-在[李宏毅的视频]([ML Lecture 14: Unsupervised Learning - Word Embedding - YouTube](https://www.youtube.com/watch?v=X7PH3NuYW0Q&t=655s))中，提到了两种训练理念，分别是count-based和prediction-based。
+在[李宏毅的视频](https://www.youtube.com/watch?v=X7PH3NuYW0Q&t=655s)中，提到了两种训练理念，分别是count-based和prediction-based。
 
 **count-based**，顾名思义，就是两个词之间共同出现的频率决定他们的距离（聚类嘛），假设在二维坐标上就是靠的近和远。但是好像很少看见这种方法？可能是我了解不多，视频中提到了哈佛大学的[GloVe](https://nlp.stanford.edu/projects/glove/)。
 
@@ -34,11 +34,11 @@
 
 总之，最后训练得到一个维度更小的词嵌入转换矩阵（或者说是线性变换啦），和原始id或者什么的相乘，得到embedding。
 
-上面这部分在[论文]([[1706.03762] Attention Is All You Need](http://arxiv.org/abs/1706.03762))中就是*input embedding*层
+上面这部分在[论文](http://arxiv.org/abs/1706.03762)中就是*input embedding*层
 
 ## position encoding
 
-$NLP$的$pe$我个人认为还是好理解的，$ViT$的$pe$我是真觉得挺神奇的哈哈哈，可能理论上是一样的吧。首先$pe$有很多种，包括绝对位置编码，相对位置编码；又有固定编码和可学习编码。transformer里用的应该是三角函数式位置编码，是一种绝对位置编码（没记错的话），具体的可以看一看[这篇文章]([Transformer中的位置编码(Position Encoding) - 郑之杰的个人网站](https://0809zheng.github.io/2022/07/01/posencode.html))。反正就是解决attention机制无法获取位置信息的问题。
+$NLP$的$pe$我个人认为还是好理解的，$ViT$的$pe$我是真觉得挺神奇的哈哈哈，可能理论上是一样的吧。首先$pe$有很多种，包括绝对位置编码，相对位置编码；又有固定编码和可学习编码。transformer里用的应该是三角函数式位置编码，是一种绝对位置编码（没记错的话），具体的可以看一看[这篇文章](https://0809zheng.github.io/2022/07/01/posencode.html)。反正就是解决attention机制无法获取位置信息的问题。
 
 但是这是直接加上去（add，不是concat）的，确实神奇。
 
@@ -46,7 +46,7 @@ $NLP$的$pe$我个人认为还是好理解的，$ViT$的$pe$我是真觉得挺�
 
 ## Attention机制
 
-先放两篇个人认为讲的比较好的blog，从两方面讲解了attention机制，合起来就比较全面了。[blog1]([狗都能看懂的Self-Attention讲解_a single-head self-attention-CSDN博客](https://blog.csdn.net/weixin_42392454/article/details/122478544?spm=1001.2014.3001.5502))和[blog2](https://zhuanlan.zhihu.com/p/410776234)
+先放两篇个人认为讲的比较好的blog，从两方面讲解了attention机制，合起来就比较全面了。[blog1](https://blog.csdn.net/weixin_42392454/article/details/122478544?spm=1001.2014.3001.5502)和[blog2](https://zhuanlan.zhihu.com/p/410776234)
 
 我个人认为，理解transformer最核心的部分，也就是attention，核心在于理解其中矩阵变换的集合意义，通俗来说就是向量内积。
 
@@ -80,12 +80,14 @@ x就是输入，通过embedding和pe处理后得到a，我们想要的，就是�
 
 ## 参考材料
 
-[1][Attention is all you need]([[1706.03762] Attention Is All You Need](http://arxiv.org/abs/1706.03762))
+[1][Attention is all you need](http://arxiv.org/abs/1706.03762)
 
 [2][超详细图解Self-Attention](https://zhuanlan.zhihu.com/p/410776234)
 
-[3][X都能看懂的Self-Attention讲解]([狗都能看懂的Self-Attention讲解_a single-head self-attention-CSDN博客](https://blog.csdn.net/weixin_42392454/article/details/122478544?spm=1001.2014.3001.5502))
+[3][X都能看懂的Self-Attention讲解](https://blog.csdn.net/weixin_42392454/article/details/122478544?spm=1001.2014.3001.5502)
 
-[4][Transformer中的位置编码(Position Encoding)]([Transformer中的位置编码(Position Encoding) - 郑之杰的个人网站](https://0809zheng.github.io/2022/07/01/posencode.html))
+[4][Transformer中的位置编码(Position Encoding)](https://0809zheng.github.io/2022/07/01/posencode.html)
 
 [5][Transformer源码详解（Pytorch版本）](https://zhuanlan.zhihu.com/p/398039366)
+
+
