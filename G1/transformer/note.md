@@ -2,6 +2,16 @@
 
 为了学习ViT和swin transformer这些视觉架构，对attention和transformer有过两周时间的学习，零零散散地也算是能看懂了，但是就像笔记里所展示的那样，很散，串不起来，所以准备用几天时间把transformer的这些知识串起来，有一个整体的理解。
 
+本人想要搞清楚的问题
+
+- [ ] embedding究竟是什么（暂时不打算**深究**了，毕竟是纯NLP的内容）
+
+- [x] Q、K、V究竟是什么（01.11）
+
+- [ ] multi-head attention究竟是什么
+
+- [ ] encoder和decoder究竟是什么
+
 ## embedding
 
 首先在NLP中，上来就是embedding，自从听说不同词的embedding是train出来的，我就一直处于深深的不理解当中。后来我才知道，不是embedding是train出来的，而是这个产生embedding的转换矩阵是train出来的。
@@ -16,9 +26,9 @@
 
 在[李宏毅的视频]([ML Lecture 14: Unsupervised Learning - Word Embedding - YouTube](https://www.youtube.com/watch?v=X7PH3NuYW0Q&t=655s))中，提到了两种训练理念，分别是count-based和prediction-based。
 
-count-based，顾名思义，就是两个词之间共同出现的频率决定他们的距离（聚类嘛），假设在二维坐标上就是靠的近和远。但是好像很少看见这种方法？可能是我了解不多，视频中提到了哈佛大学的[GloVe](https://nlp.stanford.edu/projects/glove/)。
+**count-based**，顾名思义，就是两个词之间共同出现的频率决定他们的距离（聚类嘛），假设在二维坐标上就是靠的近和远。但是好像很少看见这种方法？可能是我了解不多，视频中提到了哈佛大学的[GloVe](https://nlp.stanford.edu/projects/glove/)。
 
-感觉比较常见的是prediction based，就是用上下文来进行预测，有用前文预测后文的，有用上下文预测中间文的，有用中间文预测上下文的。大概就是这么个意思。
+感觉比较常见的是**prediction based**，就是用上下文来进行预测，有用前文预测后文的，有用上下文预测中间文的，有用中间文预测上下文的。大概就是这么个意思。
 
 ![](C:\Users\mings\AppData\Roaming\marktext\images\2024-01-10-15-56-22-image.png)![](C:\Users\mings\AppData\Roaming\marktext\images\2024-01-10-15-56-47-image.png)
 
@@ -28,7 +38,7 @@ count-based，顾名思义，就是两个词之间共同出现的频率决定他
 
 ## position encoding
 
-NLP的pe我个人认为还是好理解的，ViT的pe我是真觉得挺神奇的哈哈哈，可能理论上是一样的吧。首先pe有很多种，包括绝对位置编码，相对位置编码；又有固定编码和可学习编码。transformer里用的应该是三角函数式位置编码，是一种绝对位置编码（没记错的话），具体的可以看一看[这篇文章]([Transformer中的位置编码(Position Encoding) - 郑之杰的个人网站](https://0809zheng.github.io/2022/07/01/posencode.html))。反正就是解决attention机制无法获取位置信息的问题。
+$NLP$的$pe$我个人认为还是好理解的，$ViT$的$pe$我是真觉得挺神奇的哈哈哈，可能理论上是一样的吧。首先$pe$有很多种，包括绝对位置编码，相对位置编码；又有固定编码和可学习编码。transformer里用的应该是三角函数式位置编码，是一种绝对位置编码（没记错的话），具体的可以看一看[这篇文章]([Transformer中的位置编码(Position Encoding) - 郑之杰的个人网站](https://0809zheng.github.io/2022/07/01/posencode.html))。反正就是解决attention机制无法获取位置信息的问题。
 
 但是这是直接加上去（add，不是concat）的，确实神奇。
 
@@ -59,8 +69,6 @@ NLP的pe我个人认为还是好理解的，ViT的pe我是真觉得挺神奇的�
 那么写到这里为止，其实也大概能悟到Q，K，V究竟是啥了，从本质上来说，他们其实是一样的，就是语料库中所有word对应的embedding；从维度上来说，他们也是一样的，是A分别和三个相同维度的可训练的矩阵相乘得到的。而$QK^T$的是为了求embedding之间的内积，几何意义就是角度，实际意义就是两个embedding的相关性。
 
 $(QK^T)V$就是让某一个字符相对于其他字符的相关性系数（或者说权重）加诸于其他字符的embedding之上，之所以能够这样做的原因，是因为embedding就是字符对应语料库特征的系数！
-
-
 
 
 
