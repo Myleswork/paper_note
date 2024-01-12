@@ -34,7 +34,7 @@
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/direct/c361b823eae84043a32c57159731e981.png)
 
-总之，最后训练得到一个维度更小的词嵌入转换矩阵（或者说是线性变换啦），和原始id或者什么的相乘，得到embedding。
+总之，最后训练得到一个维度更小的词嵌入转换矩阵（或者说是线性变换啦），和one-hot组成的矩阵相乘，得到embedding。
 
 上面这部分在[论文](http://arxiv.org/abs/1706.03762)中就是*input embedding*层
 
@@ -88,13 +88,11 @@ Decoder，也就是解码，即将Encoder生成的固定长度向量转换成不
 
 上面那么大篇幅讲的也都是Encoder，很少看到文章仔细来讲transformer的decoder，也就是怎么把encoder生成的固定长度向量转换成不定长的输出的（当然也不排除我看得少）。
 
-
-
 encoder部分可并行（这也是attention机制的一个优势），decoder是不可并行（是不是也分训练的时候和推理的时候）的，这也是非常显然的，因为下一个输出需要依赖前文。
 
+那回到transformer，先来看下面这张经典的结构图
 
-
-还有一个需要强调的点就是，论文里那张经典的图，完全就是训练的时候的图，不能拿推理的时候去理解，推理的时候根本不会有后文，那就用不到mask，mask是在训练的时候用的，为了和推理的时候情况相同
+<img title="" src="file:///C:/Users/mings/AppData/Roaming/marktext/images/2024-01-12-14-36-01-image.png" alt="" width="396" data-align="center">
 
 ## 参考材料
 
