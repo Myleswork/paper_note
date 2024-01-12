@@ -92,7 +92,7 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 
 那回到transformer，先来看下面这张经典的结构图
 
-<img title="" src="file:///C:/Users/mings/AppData/Roaming/marktext/images/2024-01-12-14-36-01-image.png" alt="" width="396" data-align="center">
+<img src="file:///C:/Users/mings/AppData/Roaming/marktext/images/2024-01-12-14-37-41-image.png" title="" alt="" width="338">
 
 ## 参考材料
 
