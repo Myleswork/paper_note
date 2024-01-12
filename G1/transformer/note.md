@@ -72,13 +72,29 @@ $NLP$的$pe$我个人认为还是好理解的，$ViT$的$pe$我是真觉得挺�
 
 $(QK^T)V$就是让某一个字符相对于其他字符的相关性系数（或者说权重）加诸于其他字符的embedding之上，之所以能够这样做的原因，是因为embedding就是字符对应语料库特征的系数！
 
-
-
 ![sum](https://img-blog.csdnimg.cn/b901cb864e444f60b980863b8be2e89c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA54Ot6KGA5Y6o5biI6ZW_,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center)
 
 微观（bushi）的计算过程就如上图所示了，还是比较清晰的。
 
+## multi-head attention
 
+## Encoder＆Decoder
+
+首先需要明确的是，Encoder和Decoder并不是特定的模型或者网络结构的名称，而是一种通用的框架。只要是符合“编码-解码”的，都可以称之为Encoder-Decoder结构，Encoder和Decoder部分可以是针对不同数据类型的不同模型。
+
+Encoder，也就是编码，就是把不定长的输入序列转化成一个固定长度向量。如果我没记错的话，transformer中会插入一些冗余序列来实现得到一个固定长度向量。
+
+Decoder，也就是解码，即将Encoder生成的固定长度向量转换成不定长的输出序列。
+
+上面那么大篇幅讲的也都是Encoder，很少看到文章仔细来讲transformer的decoder，也就是怎么把encoder生成的固定长度向量转换成不定长的输出的（当然也不排除我看得少）。
+
+
+
+encoder部分可并行（这也是attention机制的一个优势），decoder是不可并行（是不是也分训练的时候和推理的时候）的，这也是非常显然的，因为下一个输出需要依赖前文。
+
+
+
+还有一个需要强调的点就是，论文里那张经典的图，完全就是训练的时候的图，不能拿推理的时候去理解，推理的时候根本不会有后文，那就用不到mask，mask是在训练的时候用的，为了和推理的时候情况相同
 
 ## 参考材料
 
@@ -91,5 +107,3 @@ $(QK^T)V$就是让某一个字符相对于其他字符的相关性系数（或�
 [4][Transformer中的位置编码(Position Encoding)](https://0809zheng.github.io/2022/07/01/posencode.html)
 
 [5][Transformer源码详解（Pytorch版本）](https://zhuanlan.zhihu.com/p/398039366)
-
-
