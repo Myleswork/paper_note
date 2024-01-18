@@ -116,7 +116,7 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 
 
 
-![](C:\Users\mings\Desktop\1fefca18101c4b068e369c8ab82b699.png)
+![](C:\Users\mings\Desktop\1fefca18101c4b068e369c8ab82b699.png) 
 
 ## encoder和decoder之间传递的信息是什么
 
