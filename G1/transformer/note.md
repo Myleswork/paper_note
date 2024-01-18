@@ -8,11 +8,11 @@
 
 - [x] Q、K、V究竟是什么（01.11）
 
-- [ ] multi-head attention究竟是什么
+- [x] multi-head attention究竟是什么
 
-- [ ] encoder和decoder究竟是什么
+- [x] encoder和decoder究竟是什么
 
-- [ ] encoder和decoder之间传递的信息是什么
+- [ ] encoder和decoder之间传递的信息是什么（half-half）
 
 ## embedding
 
@@ -80,9 +80,17 @@ $(QK^T)V$就是让某一个字符相对于其他字符的相关性系数（或�
 
 ## multi-head attention
 
+multi-head attention其实和cnn中的多个filter是一个道理，用n个filter去提取特征，然后将得到的抽象特征进行concat，至于说为什么不同的filter能够提取到不同的特征（不知道这么说是否严谨，可能也有不同的filter提提取到大致相同的特征），有点黑盒，后续在深挖一下。
+
+那multi-head其实就是一个逻辑，多个head能够抽取不同的信息，将抽取到的信息concat，能够提升模型性能。
+
+![97e50372661208d2b73adcf1b38a369.png](C:\Users\mings\Desktop\97e50372661208d2b73adcf1b38a369.png)
+
+
+
 ## Encoder＆Decoder
 
-首先需要明确的是，Encoder和Decoder并不是特定的模型或者网络结构的名称，而是一种通用的框架。只要是符合“编码-解码”的，都可以称之为Encoder-Decoder结构，Encoder和Decoder部分可以是针对不同数据类型的不同模型。
+首先需要明确的是，Encoder和Decoder并不是特定的模型或者网络结构的名称，而是一种通用的框架。只要是符合“编码-解码”的，都可以称之为Encoder-Decoder结构，比如CNN，卷积操作就是encoder，将图像转换成一些数字；最后的dense部分就是decoder，将卷积部分得到的一系列数字vector，转换成我们想要的输出，比如说分类任务那就是input对应的类别。Encoder和Decoder部分可以是针对不同数据类型的不同模型，像现在的多模态，是吧。
 
 Encoder，也就是编码，就是把不定长的输入序列转化成一个固定长度向量。如果我没记错的话，transformer中会插入一些冗余序列来实现得到一个固定长度向量。
 
@@ -98,7 +106,23 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 
 首先要说明的是，这张图是训练过程的示意图，如果拿推理的逻辑去看这张图的话，那问题就多了，主要集中在Decoder部分。比如，Outputs为什么是去输入的？Output为什么会能embedding？Output为什么能$pe$？所以先按训练的逻辑来看这张图，拿一个实际的例子来解释，会更清楚。Decoder部分也会单独讲。
 
-以翻译任务为例，我们想要把依据英文，例如“Hello world”翻译为“你好世界”，那么在Encoder部分，Inputs就是"Hello world"的one-hot矩阵(当然是经过一些处理的，理解上没有差异)，经过embedding以及pe操作后，送入
+以翻译任务为例，我们想要把依据英文，例如“Hello world”翻译为“你好世界”，那么在Encoder部分，Inputs就是"Hello world"的one-hot矩阵(当然是经过一些处理的，理解上没有差异)，经过embedding以及pe操作后，送入灰块块进行self-attention计算，最后得到一个hidden state。这个hidden state就包含了句子中词与词之间的隐藏信息，将这个隐藏信息送入decoder，用于“你好世界”上下文之间的训练。
+
+也就是什么意思呢，在训练过程中，encoder的输入是原始数据，比如就是“hello world”；而decoder部分的输入，是"pos"+翻译之后的内容，比如就是"pos 你好 世界"，当然，在训练时，当前字符后面的字符是被mask掉的，代码实现我记得就是把当前code(或者叫token？)后面的code的权重设置为0（也就是不让它们更新），而decoder部分的GT是什么呢，是翻译之后的内容+"EOS"。这样的话训练过程基本上就清晰了，这部分论文里我记得并没有提到（也可能是我漏看了），所以云里雾里。
+
+那么推理部分和训练部分的区别就在于，我的模型现在有原始数据的语料库hidden state和对应翻译结果的语料库hidden state，然后有**原始数据**和**POS**，然后将原始数据输入进encoder进行相同的处理，在当前字符走完一遍流程之后将hidden state送入decoder，作为query和key，decoder部分将当前字符（一开始是POS，对吧，那么后面就有生成的字符了）送入multi-head attention（这里就不需要mask了，因为本身也不知道后面的字符是啥，是要预测的）和残差结构，输出的q,k,v作为下一个多投结构的输入，当然要和encoder过来的q和k一起（可能是concat），走完剩下的流程就能输出当前字符的下一预测字符，然后接上预测字符作为下一个循环的输出，直到预测输出为"EOS"，那么预测就结束了。
+
+其实这部分逻辑和seq2seq是一样的，无非就是transformer用的是self-attention，seq2seq用的RNN罢了。可以先去理解一下seq2seq，对理解transformer有很大的帮助。
+
+
+
+![](C:\Users\mings\Desktop\1fefca18101c4b068e369c8ab82b699.png)
+
+## encoder和decoder之间传递的信息是什么
+
+![](C:\Users\mings\Desktop\3ac25e09351823fed9776783bed1215.png)
+
+传递的是当前已有sentence的hidden state，这个还可以探究一下，先放一放。
 
 ## 参考材料
 
@@ -111,3 +135,7 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 [4][Transformer中的位置编码(Position Encoding)](https://0809zheng.github.io/2022/07/01/posencode.html)
 
 [5][Transformer源码详解（Pytorch版本）](https://zhuanlan.zhihu.com/p/398039366)
+
+[序列到序列学习（seq2seq）【动手学深度学习v2】](https://www.bilibili.com/video/BV16g411L7FG/?spm_id_from=333.999.0.0&vd_source=9491ac033fe23c13918015db536d84db)
+
+[Transformer【动手学深度学习v2】](https://www.bilibili.com/video/BV1Kq4y1H7FL/?spm_id_from=333.999.0.0&vd_source=9491ac033fe23c13918015db536d84db)
