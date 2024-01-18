@@ -12,6 +12,8 @@
 
 - [ ] encoder和decoder究竟是什么
 
+- [ ] encoder和decoder之间传递的信息是什么
+
 ## embedding
 
 首先在NLP中，上来就是embedding，自从听说不同词的embedding是train出来的，我就一直处于深深的不理解当中。后来我才知道，不是embedding是train出来的，而是这个产生embedding的转换矩阵是train出来的。
@@ -93,6 +95,10 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 那回到transformer，先来看下面这张经典的结构图
 
 <img title="" src="https://img-blog.csdnimg.cn/direct/f3caa21f71ae4f299adc821f963f2209.png" alt="在这里插入图片描述" width="517" data-align="center">
+
+首先要说明的是，这张图是训练过程的示意图，如果拿推理的逻辑去看这张图的话，那问题就多了，主要集中在Decoder部分。比如，Outputs为什么是去输入的？Output为什么会能embedding？Output为什么能$pe$？所以先按训练的逻辑来看这张图，拿一个实际的例子来解释，会更清楚。Decoder部分也会单独讲。
+
+以翻译任务为例，我们想要把依据英文，例如“Hello world”翻译为“你好世界”，那么在Encoder部分，Inputs就是"Hello world"的one-hot矩阵(当然是经过一些处理的，理解上没有差异)，经过embedding以及pe操作后，送入
 
 ## 参考材料
 
