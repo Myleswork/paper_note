@@ -84,9 +84,7 @@ multi-head attention其实和cnn中的多个filter是一个道理，用n个filte
 
 那multi-head其实就是一个逻辑，多个head能够抽取不同的信息，将抽取到的信息concat，能够提升模型性能。
 
-![97e50372661208d2b73adcf1b38a369.png](C:\Users\mings\Desktop\97e50372661208d2b73adcf1b38a369.png)
-
-
+![在这里插入图片描述](https://img-blog.csdnimg.cn/direct/369c5c9deaeb4be2a30b03e11f0401ff.png)
 
 ## Encoder＆Decoder
 
@@ -114,13 +112,11 @@ encoder部分可并行（这也是attention机制的一个优势），decoder是
 
 其实这部分逻辑和seq2seq是一样的，无非就是transformer用的是self-attention，seq2seq用的RNN罢了。可以先去理解一下seq2seq，对理解transformer有很大的帮助。
 
-
-
-![](C:\Users\mings\Desktop\1fefca18101c4b068e369c8ab82b699.png) 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/direct/5c920cb8f2e447f282c6ad2dbd44324b.png) 
 
 ## encoder和decoder之间传递的信息是什么
 
-![](C:\Users\mings\Desktop\3ac25e09351823fed9776783bed1215.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/direct/6b9e4f0e3e26420c8cb78bd1f16d14ba.png)
 
 传递的是当前已有sentence的hidden state，这个还可以探究一下，先放一放。
 
